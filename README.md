@@ -18,6 +18,7 @@ Installation:
    Beim Start der Anwendung ist die Datenbank noch leer
 
 Jetzt kannst du:
+
 8. Geisternetz ohne Anmeldung hinzufügen
 9. einen User registrieren und anmelden
 10. weitere Funktionen als angemeldeter User durchführen
