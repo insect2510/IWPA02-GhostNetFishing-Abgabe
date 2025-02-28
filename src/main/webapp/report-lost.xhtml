@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+	<title>Shea Sepherd - Ghostnet Fishing</title>
+</h:head>
+<h:body>
+
+	<div class="outer">
+		<h:form>
+			<p:megaMenu id="topmenu" orientation="horizontal" autoDisplay="true">
+				<p:menuitem icon="pi pi-home" url="index.xhtml" />
+				<p:submenu label="Übersicht">
+					<p:column>
+						<p:submenu>
+							<p:menuitem value="Alle Netze" url="list-nets.xhtml" />
+							<p:menuitem value="Karte" url="map.xhtml"
+								rendered="#{loginController.loginState}" />
+						</p:submenu>
+					</p:column>
+				</p:submenu>
+				<p:submenu label="Melden">
+					<p:column>
+						<p:submenu>
+							<p:menuitem value="Neues Netz melden" url="report-new.xhtml" />
+							<p:menuitem value="Bergung ankündigen" url="report-rescue.xhtml"
+								rendered="#{loginController.loginState}" />
+							<p:menuitem value="Bergung bearbeiten" url="report-change.xhtml"
+								rendered="#{loginController.loginState}" />
+							<p:menuitem value="Verschollen melden" url="report-lost.xhtml"
+								rendered="#{loginController.loginState}" />
+						</p:submenu>
+					</p:column>
+				</p:submenu>
+				<p:submenu label="Informationen">
+					<p:column>
+						<p:submenu>
+							<p:menuitem value="Ozeane" url="#" />
+							<p:menuitem value="Geisternetze" url="#" />
+							<p:menuitem value="Recycling" url="#" />
+						</p:submenu>
+					</p:column>
+				</p:submenu>
+				<p:menuitem value="Login" icon="pi pi-sign-in" url="login.xhtml"
+					rendered="#{loginController.loginState == false}" />
+				<p:submenu label="" icon="pi pi-user"
+					rendered="#{loginController.loginState == true}">
+					<p:column>
+						<p:submenu>
+							<p:menuitem
+								value="Hallo #{loginController.currentUser.firstName} #{loginController.currentUser.lastName}" />
+							<p:menuitem value="Logout" icon="pi pi-sign-out"
+								action="#{loginController.logout}" update="topmenu" />
+						</p:submenu>
+					</p:column>
+				</p:submenu>
+			</p:megaMenu>
+			<p:sticky target="topmenu" />
+		</h:form>
+		
+		<div class="top"></div>
+
+		<p>
+			<img id="headerpic" src="img/hero-400.jpg" width="100%" alt="header" />
+		</p>
+
+		<h1>Geisternetz als verschollen melden</h1>
+
+		<p>Ein Geisternetz ist an der gemeldeten Position nicht mehr
+			auffindbar? Dann melde es hier als verschollen.</p>
+
+		<h2>Übersicht über noch zu bergende Geisternetze</h2>
+
+		<p:card rendered="#{loginController.loginState == false}">
+			<p>Melde dich an, um ein Geisternetz als verschollen zu melden.
+				Dafür benötigen wir auch deine Telefonnummer.</p>
+			<p:button value="Login" outcome="login.xhtml"
+				styleClass="ui-button-secondary" />
+		</p:card>
+
+		<h:form id="form" rendered="#{loginController.loginState}">
+
+			<p:dataTable var="ghostNet" value="#{sea.ghostNetListNotLost}"
+				stripedRows="true"
+				emptyMessage="Keine Netze zum verschollen melden gefunden."
+				id="ghostnettable" widgetVar="ghostNetView" reflow="true">
+
+				<p:column headerText="Längengrad" sortable="false"
+					filterable="false">
+					<h:outputText value="#{ghostNet.gpsLatitude}">
+						<f:convertNumber pattern="00.0000000" locale="en-US" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Breitengrad" sortable="false"
+					filterable="false">
+					<h:outputText value="#{ghostNet.gpsLongitude}">
+						<f:convertNumber pattern="000.0000000" locale="en-US" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Länge" sortable="false" filterable="false">
+					<h:outputText value="#{ghostNet.netLength}">
+						<f:convertNumber pattern="0.00" />
+					</h:outputText>
+					<h:outputText value=" m" />
+				</p:column>
+
+				<p:column headerText="Breite" sortable="false" filterable="false">
+					<h:outputText value="#{ghostNet.netWidth}">
+						<f:convertNumber pattern="0.00" />
+					</h:outputText>
+					<h:outputText value=" m" />
+				</p:column>
+
+				<p:column headerText="Status" sortable="false" filterable="false">
+					<h:outputText value="#{ghostNet.state.stateName}" />
+				</p:column>
+
+				<p:column headerText="Aktion">
+					<p:commandButton icon="pi pi-question-circle" value="Verschollen"
+						action="#{ghostNetController.reportLost(ghostNet)}" update=":form"
+						title="Verschollen melden" styleClass="ui-button-danger" />
+				</p:column>
+
+			</p:dataTable>
+
+			<p:messages showDetail="true">
+				<p:autoUpdate />
+			</p:messages>
+
+		</h:form>
+
+		<p:button outcome="index.xhtml" value="Startseite"
+			icon="pi pi-arrow-left" styleClass="ui-button-secondary"
+			style="margin-top: 8px; margin-right: 8px" />
+		<p:button outcome="list-nets.xhtml" value="Übersicht"
+			icon="pi pi-list" styleClass="ui-button-secondary"
+			style="margin-top: 8px" />
+
+
+		<div class="ui-g footer">
+			<div class="ui-sm-12 ui-md-6 ui-lg-3">
+				<h:commandLink action="#">
+					<h:outputText value="Impressum" />
+				</h:commandLink>
+			</div>
+			<div class="ui-sm-12 ui-md-6 ui-lg-3">
+				<h:commandLink action="#">
+					<h:outputText value="Datenschutz" />
+				</h:commandLink>
+			</div>
+			<div class="ui-sm-12 ui-md-6 ui-lg-3">
+				<h:commandLink action="#">
+					<h:outputText value="Kontakt" />
+				</h:commandLink>
+			</div>
+			<div class="ui-sm-12 ui-md-6 ui-lg-3">
+				<p>
+					<h:outputText value="#{company.name}" />
+					<br />
+					<h:outputText value="#{company.street}" />
+					<br />
+					<h:outputText value="#{company.postCode} #{company.city}" />
+					<br />
+					<h:outputText value="#{company.country}" />
+				</p>
+			</div>
+		</div>
+
+	</div>
+
+</h:body>
+</html>

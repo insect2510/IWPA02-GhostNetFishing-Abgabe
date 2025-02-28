@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+	<title>Shea Sepherd - Ghostnet Fishing</title>
+</h:head>
+<h:body>
+
+	<div class="outer">
+		<h:form>
+			<p:megaMenu id="topmenu" orientation="horizontal" autoDisplay="true">
+				<p:menuitem icon="pi pi-home" url="index.xhtml" />
+				<p:submenu label="Übersicht">
+					<p:column>
+						<p:submenu>
+							<p:menuitem value="Alle Netze" url="list-nets.xhtml" />
+							<p:menuitem value="Karte" url="map.xhtml"
+								rendered="#{loginController.loginState}" />
+						</p:submenu>
+					</p:column>
+				</p:submenu>
+				<p:submenu label="Melden">
+					<p:column>
+						<p:submenu>
+							<p:menuitem value="Neues Netz melden" url="report-new.xhtml" />
+							<p:menuitem value="Bergung ankündigen" url="report-rescue.xhtml"
+								rendered="#{loginController.loginState}" />
+							<p:menuitem value="Bergung bearbeiten" url="report-change.xhtml"
+								rendered="#{loginController.loginState}" />
+							<p:menuitem value="Verschollen melden" url="report-lost.xhtml"
+								rendered="#{loginController.loginState}" />
+						</p:submenu>
+					</p:column>
+				</p:submenu>
+				<p:submenu label="Informationen">
+					<p:column>
+						<p:submenu>
+							<p:menuitem value="Ozeane" url="#" />
+							<p:menuitem value="Geisternetze" url="#" />
+							<p:menuitem value="Recycling" url="#" />
+						</p:submenu>
+					</p:column>
+				</p:submenu>
+				<p:menuitem value="Login" icon="pi pi-sign-in" url="login.xhtml"
+					rendered="#{loginController.loginState == false}" />
+				<p:submenu label="" icon="pi pi-user"
+					rendered="#{loginController.loginState == true}">
+					<p:column>
+						<p:submenu>
+							<p:menuitem
+								value="Hallo #{loginController.currentUser.firstName} #{loginController.currentUser.lastName}" />
+							<p:menuitem value="Logout" icon="pi pi-sign-out"
+								action="#{loginController.logout}" update="topmenu" />
+						</p:submenu>
+					</p:column>
+				</p:submenu>
+			</p:megaMenu>
+			<p:sticky target="topmenu" />
+		</h:form>
+
+		<div class="top"></div>
+
+		<p>
+			<img id="headerpic" src="img/hero-400.jpg" width="100%" alt="header" />
+		</p>
+
+		<h1>Geisternetz melden</h1>
+
+		<h:form>
+
+			<p:card style="max-width: 40em">
+				<h:panelGrid columns="2" class="edittable" reflow="true">
+
+					<h:outputText value="Nr:" />
+					<h:outputText value="wird automatisch vergeben." />
+
+					<h:outputLabel value="GPS Breitengrad:" for="gpslatitude" />
+					<p:inputText id="gpslatitude" label="GPS Breitengrad"
+						value="#{ghostNetController.newGhostNet.gpsLatitude}" size="10"
+						required="true" validator="#{ghostNetValidator.validateLatitude}"
+						converterMessage="Falsches Format. Bitte Zahlen mit Punkt als Trennzeichen eingeben.">
+					</p:inputText>
+
+					<h:outputText />
+					<small class="block">Dezimalangabe zwischen -90.00 und
+						90.00</small>
+					<h:outputText />
+					<h:message for="gpslatitude" />
+
+					<h:outputLabel value="GPS Längengrad:" for="gpslongitude" />
+					<p:inputText id="gpslongitude" label="GPS Längengrad"
+						value="#{ghostNetController.newGhostNet.gpsLongitude}" size="10"
+						required="true" validator="#{ghostNetValidator.validateLongitude}"
+						converterMessage="Falsches Format. Bitte Zahlen mit Punkt als Trennzeichen eingeben.">
+					</p:inputText>
+					<h:outputText />
+					<small class="block">Dezimalangabe zwischen -180.00 und
+						180.00</small>
+					<h:outputText />
+					<h:message for="gpslongitude" />
+
+					<h:outputLabel value="Geschätzte Länge:" for="netlength" />
+					<h:outputText id="outputNetLength" value="0 m " />
+					<h:inputHidden id="netlength" label="Länge des Netzes"
+						value="#{ghostNetController.newGhostNet.netLength}"
+						required="true" />
+					<p:slider for="netlength" minValue="1.0" maxValue="100" step="1.0"
+						range="min" display="outputNetLength" displayTemplate="{value} m" />
+					<h:outputText />
+					<small class="block">Angabe in Metern.</small>
+					<h:outputText />
+					<h:message for="netlength" />
+
+
+					<h:outputLabel value="Geschätzte Breite:" for="netwidth" />
+					<h:outputText id="outputNetWidth" value="0 m " />
+					<h:inputHidden id="netwidth" label="Breite des Netzes"
+						value="#{ghostNetController.newGhostNet.netWidth}" required="true" />
+					<p:slider for="netwidth" minValue="1.0" maxValue="100" step="1.0"
+						range="min" display="outputNetWidth" displayTemplate="{value} m" />
+					<h:outputText />
+					<small class="block">Angabe in Metern.</small>
+					<h:outputText />
+					<h:message for="netwidth" />
+
+					<h:outputText />
+					<h:outputText />
+
+					<p:button outcome="index.xhtml" value="Startseite"
+						icon="pi pi-arrow-left" styleClass="ui-button-secondary" />
+					<p:commandButton id="speichern" value="Speichern" update="@form"
+						action="#{ghostNetController.saveNewGhostNet}" icon="pi pi-save"
+						styleClass="ui-button-secondary" />
+					<h:outputText />
+					
+				</h:panelGrid>
+				<p:messages showDetail="false" for="speichern">
+					<p:autoUpdate />
+				</p:messages>
+			</p:card>
+
+		</h:form>
+
+		<div class="ui-g footer">
+			<div class="ui-sm-12 ui-md-6 ui-lg-3">
+				<h:commandLink action="#">
+					<h:outputText value="Impressum" />
+				</h:commandLink>
+			</div>
+			<div class="ui-sm-12 ui-md-6 ui-lg-3">
+				<h:commandLink action="#">
+					<h:outputText value="Datenschutz" />
+				</h:commandLink>
+			</div>
+			<div class="ui-sm-12 ui-md-6 ui-lg-3">
+				<h:commandLink action="#">
+					<h:outputText value="Kontakt" />
+				</h:commandLink>
+			</div>
+			<div class="ui-sm-12 ui-md-6 ui-lg-3">
+				<p>
+					<h:outputText value="#{company.name}" />
+					<br />
+					<h:outputText value="#{company.street}" />
+					<br />
+					<h:outputText value="#{company.postCode} #{company.city}" />
+					<br />
+					<h:outputText value="#{company.country}" />
+				</p>
+			</div>
+		</div>
+
+	</div>
+
+
+</h:body>
+</html>

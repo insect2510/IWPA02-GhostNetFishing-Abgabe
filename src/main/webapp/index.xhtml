@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+	<title>Shea Sepherd - Ghostnet Fishing</title>
+</h:head>
+<h:body>
+	<div class="outer">
+		<h:form>
+			<p:megaMenu id="topmenu" orientation="horizontal" autoDisplay="true">
+				<p:menuitem icon="pi pi-home" url="index.xhtml" />
+				<p:submenu label="Übersicht">
+					<p:column>
+						<p:submenu>
+							<p:menuitem value="Alle Netze" url="list-nets.xhtml" />
+							<p:menuitem value="Karte" url="map.xhtml"
+								rendered="#{loginController.loginState}" />
+						</p:submenu>
+					</p:column>
+				</p:submenu>
+				<p:submenu label="Melden">
+					<p:column>
+						<p:submenu>
+							<p:menuitem value="Neues Netz melden" url="report-new.xhtml" />
+							<p:menuitem value="Bergung ankündigen" url="report-rescue.xhtml"
+								rendered="#{loginController.loginState}" />
+							<p:menuitem value="Bergung bearbeiten" url="report-change.xhtml"
+								rendered="#{loginController.loginState}" />
+							<p:menuitem value="Verschollen melden" url="report-lost.xhtml"
+								rendered="#{loginController.loginState}" />
+						</p:submenu>
+					</p:column>
+				</p:submenu>
+				<p:submenu label="Informationen">
+					<p:column>
+						<p:submenu>
+							<p:menuitem value="Ozeane" url="#" />
+							<p:menuitem value="Geisternetze" url="#" />
+							<p:menuitem value="Recycling" url="#" />
+						</p:submenu>
+					</p:column>
+				</p:submenu>
+				<p:menuitem value="Login" icon="pi pi-sign-in" url="login.xhtml"
+					rendered="#{loginController.loginState == false}" />
+				<p:submenu label="" icon="pi pi-user"
+					rendered="#{loginController.loginState == true}">
+					<p:column>
+						<p:submenu>
+							<p:menuitem
+								value="Hallo #{loginController.currentUser.firstName} #{loginController.currentUser.lastName}" />
+							<p:menuitem value="Logout" icon="pi pi-sign-out"
+								action="#{loginController.logout}" update="topmenu" />
+						</p:submenu>
+					</p:column>
+				</p:submenu>
+			</p:megaMenu>
+			<p:sticky target="topmenu" />
+		</h:form>
+
+		<div class="top"></div>
+
+		<p>
+			<img id="headerpic" src="img/hero-400.jpg" width="100%" alt="header" />
+		</p>
+
+		<h1>
+			<h:outputText value=" #{company.name} " />
+		</h1>
+
+		<p:panelGrid columns="2" layout="grid"
+			styleClass="showcase-text-align-center">
+
+			<p:card>
+				<f:facet name="header">
+					<img alt="user header" src="img/card1.jpg" />
+				</f:facet>
+				<f:facet name="title">Datenbank</f:facet>
+				<p>
+					Aktuell haben wir
+					<h:outputText value=" #{sea.ghostNetCount}" />
+					Geisternetze in unserer Datenbank.
+				</p>
+				<f:facet name="footer">
+					<p:button value="Übersicht" outcome="list-nets.xhtml"
+						styleClass="ui-button-secondary" />
+				</f:facet>
+			</p:card>
+
+			<p:card>
+				<f:facet name="header">
+					<img alt="user header" src="img/card2.jpg" />
+				</f:facet>
+				<f:facet name="title">Neues Netz Melden</f:facet>
+				<p>Du hast ein Geisternetz entdeckt? Dann melde es uns.</p>
+				<f:facet name="footer">
+					<p:button value="Netz melden" outcome="report-new.xhtml"
+						styleClass="ui-button-secondary" />
+				</f:facet>
+			</p:card>
+
+			<p:card rendered="#{loginController.loginState}">
+				<f:facet name="header">
+					<img alt="user header" src="img/card3.jpg" />
+				</f:facet>
+				<f:facet name="title">Bergung ankündigen</f:facet>
+				<p>Du kannst die Bergung eines Netzes ankündigen.</p>
+				<f:facet name="footer">
+					<p:button value="Bergung ankündigen" outcome="report-rescue.xhtml"
+						styleClass="ui-button-secondary" />
+				</f:facet>
+			</p:card>
+
+			<p:card rendered="#{loginController.loginState}">
+				<f:facet name="header">
+					<img alt="user header" src="img/card4.jpg" />
+				</f:facet>
+				<f:facet name="title">Bergung abmelden</f:facet>
+				<p>Hier kannst du deine angekündigte Bergung abmelden.</p>
+				<f:facet name="footer">
+					<p:button value="Bergung abmelden" outcome="report-change.xhtml"
+						styleClass="ui-button-secondary" />
+				</f:facet>
+			</p:card>
+
+			<p:card rendered="#{loginController.loginState}">
+				<f:facet name="header">
+					<img alt="user header" src="img/card5.jpg" />
+				</f:facet>
+				<f:facet name="title">Geborgen melden</f:facet>
+				<p>Hier kannst du ein Geisternetz als geborgen melden.</p>
+				<f:facet name="footer">
+					<p:button value="Geborgen melden" outcome="report-change.xhtml"
+						styleClass="ui-button-secondary" />
+				</f:facet>
+			</p:card>
+
+			<p:card rendered="#{loginController.loginState}">
+				<f:facet name="header">
+					<img alt="user header" src="img/card6.jpg" />
+				</f:facet>
+				<f:facet name="title">Verschollenes Netz melden</f:facet>
+				<p>Ein Geisternetz ist verschollen? Dann melde es uns.</p>
+
+				<f:facet name="footer">
+					<p:button value="Verschollen melden" outcome="report-lost.xhtml"
+						styleClass="ui-button-secondary" />
+				</f:facet>
+			</p:card>
+
+
+		</p:panelGrid>
+
+		<h2>Gefahr für unsere Meere</h2>
+
+		<p>Geisternetze, verlorene oder entsorgte Fischernetze, treiben
+			unbemerkt durch die Ozeane und schaden massiv der Meereswelt. Sie
+			fangen Tiere wie Fische und Schildkröten ein, verschmutzen die
+			Gewässer und zerfallen mit der Zeit zu Mikroplastik, das in die
+			Nahrungskette gelangt.</p>
+
+		<p>Wir setzen uns dafür ein, Geisternetze zu bergen, zu recyceln
+			und die Meere zu schützen. Gemeinsam können wir die Ozeane retten –
+			für eine saubere und nachhaltige Zukunft!</p>
+
+		<h2>Über Uns</h2>
+		<p>Wir haben es uns zur Aufgabe gemacht, die Meere von
+			Geisternetzen zu befreien. Du kannst uns dabei helfen!</p>
+
+
+		<div class="ui-g footer">
+			<div class="ui-sm-12 ui-md-6 ui-lg-3">
+				<h:commandLink action="#">
+					<h:outputText value="Impressum" />
+				</h:commandLink>
+			</div>
+			<div class="ui-sm-12 ui-md-6 ui-lg-3">
+				<h:commandLink action="#">
+					<h:outputText value="Datenschutz" />
+				</h:commandLink>
+			</div>
+			<div class="ui-sm-12 ui-md-6 ui-lg-3">
+				<h:commandLink action="#">
+					<h:outputText value="Kontakt" />
+				</h:commandLink>
+			</div>
+			<div class="ui-sm-12 ui-md-6 ui-lg-3">
+				<p>
+					<h:outputText value="#{company.name}" />
+					<br />
+					<h:outputText value="#{company.street}" />
+					<br />
+					<h:outputText value="#{company.postCode} #{company.city}" />
+					<br />
+					<h:outputText value="#{company.country}" />
+				</p>
+			</div>
+		</div>
+	</div>
+</h:body>
+</html>
