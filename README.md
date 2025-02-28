@@ -4,7 +4,7 @@ Aufgabe 3 Geisternetze
 Die dynamische Webanwendung speichert Daten zu Geisternetzen in einer relationalen Datenbank.
 Diese Daten können anschließend abgerufen und verändert werden.
 
-Als Technologie Stack kam JSF mit PriimeFaces, sowie Hibernate und MySQL zur Anwendung.
+Als Technologie Stack kam JSF mit PrimeFaces, sowie Hibernate und MySQL zur Anwendung.
 
 Installation:
 1. Repository als Zip downloaden
